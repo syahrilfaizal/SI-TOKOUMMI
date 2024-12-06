@@ -6,7 +6,7 @@ $tanggal = $_POST['tanggal'];
 $jumlah = $_POST['jumlah_pemasukan'];
 
 // Query update untuk tabel pengeluaran
-$query = mysqli_query($koneksi, "UPDATE pemasukan SET tanggal='$tanggal', jumlah_pemasukan='$jumlah' WHERE id_pemasukan='$id'");
+$query = mysqli_query($koneksi, "DELETE FROM pemasukan WHERE id_pemasukan='$id'");
 
 if ($query) {
     // Redirect ke halaman pengeluaran.php setelah update berhasil

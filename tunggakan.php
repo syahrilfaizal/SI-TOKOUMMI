@@ -96,37 +96,47 @@ $totalArrayJS = json_encode($totalArray);
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                       </div>
                       <div class="modal-body">
-                        <form role="form" action="proses-edit-tunggakan.php" method="get">
-                          <input type="hidden" name="id_tunggakan" value="<?= $data['id_tunggakan']; ?>">
+  <form id="formTunggakan" role="form" action="proses-edit-tunggakan.php" method="get">
+    <input type="hidden" name="id_tunggakan" value="<?= $data['id_tunggakan']; ?>">
 
-                          <div class="form-group">
-                            <label>Jumlah</label>
-                            <input type="text" name="jumlah" class="form-control" value="<?= $data['jumlah']; ?>">      
-                          </div>
+    <div class="form-group">
+      <label>Jumlah</label>
+      <input type="text" name="jumlah" class="form-control" value="<?= $data['jumlah']; ?>">      
+    </div>
 
-                          <div class="form-group">
-                            <label>Tanggal</label>
-                            <input type="date" name="tanggal" class="form-control" value="<?= $data['tanggal']; ?>">      
-                          </div>
+    <div class="form-group">
+      <label>Tanggal</label>
+      <input type="date" name="tanggal" class="form-control" value="<?= $data['tanggal']; ?>">      
+    </div>
 
-                          <div class="form-group">
-                            <label>Keterangan</label>
-                            <input type="text" name="keterangan" class="form-control" value="<?= $data['keterangan']; ?>">      
-                          </div>
+    <div class="form-group">
+      <label>Keterangan</label>
+      <input type="text" name="keterangan" class="form-control" value="<?= $data['keterangan']; ?>">      
+    </div>
 
-                          <div class="form-group">
-                            <label>Status</label>
-                            <select name="status" class="form-control">
-                              <option value="Belum Dibayar" <?= $data['status'] == 'Belum Dibayar' ? 'selected' : '' ?>>Belum Dibayar</option>
-                              <option value="Sudah Dibayar" <?= $data['status'] == 'Sudah Dibayar' ? 'selected' : '' ?>>Sudah Dibayar</option>
-                            </select>     
-                          </div>
-                          <div class="modal-footer">  
-                            <button type="submit" class="btn btn-success">Ubah</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-                          </div>
-                        </form>
-                      </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select name="status" class="form-control">
+        <option value="Belum Dibayar" <?= $data['status'] == 'Belum Dibayar' ? 'selected' : '' ?>>Belum Dibayar</option>
+        <option value="Sudah Dibayar" <?= $data['status'] == 'Sudah Dibayar' ? 'selected' : '' ?>>Sudah Dibayar</option>
+      </select>     
+    </div>
+    <div class="modal-footer">  
+      <button type="submit" class="btn btn-success">Ubah</button>
+      <button type="button" class="btn btn-danger" onclick="hapusTunggakan()">Hapus</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function hapusTunggakan() {
+    var form = document.getElementById('formTunggakan');
+    form.action = 'proses_delete_tunggakan.php';
+    form.submit();
+  }
+</script>
+
                     </div>
                   </div>
                 </div>

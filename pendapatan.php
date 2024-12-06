@@ -64,8 +64,10 @@ require ('sidebar.php'); ?>
                 <th>ID Pemasukan</th>
                 <th>Jumlah Pemasukan</th>
                 <th>Tanggal</th>
+                <th>Aksi</th>
               </tr>
             </thead>
+            
             <tbody>
   <?php
   // Query untuk mengambil data dari tabel pemasukan
@@ -76,25 +78,70 @@ require ('sidebar.php'); ?>
   $jumlahArray = [];
   
   while ($data = mysqli_fetch_assoc($query)) {
-    // Pastikan jumlah_pemasukan memiliki nilai valid, jika tidak beri default 0
     $jumlah_pemasukan = !empty($data['jumlah_pemasukan']) ? $data['jumlah_pemasukan'] : 0;
     
     echo "<tr>";
     echo "<td>" . $data['id_pemasukan'] . "</td>";
     echo "<td>Rp. " . number_format($jumlah_pemasukan, 0, ',', '.') . "</td>";
     echo "<td>" . $data['tanggal'] . "</td>";
+    echo "<td>";
+    echo "<button type='button' class='fa fa-edit btn btn-primary btn-md' data-toggle='modal' data-target='#modalAksi" . $data['id_pemasukan'] . "'></button>";
+    echo "</td>";
     echo "</tr>";
     
-    // Tambahkan data ke array untuk chart
     $tanggalArray[] = $data['tanggal'];
     $jumlahArray[] = $jumlah_pemasukan;
   }
 
-  // Encode data untuk digunakan di JavaScript
   $tanggalArrayJS = json_encode($tanggalArray);
   $jumlahArrayJS = json_encode($jumlahArray);
   ?>
 </tbody>
+<?php
+$query = mysqli_query($koneksi, "SELECT * FROM pemasukan");
+while ($data = mysqli_fetch_assoc($query)) {
+?>
+  <div class="modal fade" id="modalAksi<?= $data['id_pemasukan']; ?>" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Ubah Data Pemasukan</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+        <form method="post" id="formpemasukan<?= $data['id_pemasukan']; ?>" action="proses-edit-pemasukan.php">
+    <input type="hidden" name="id_pemasukan" value="<?= $data['id_pemasukan']; ?>">
+    <div class="form-group">
+        <label>Jumlah Pemasukan</label>
+        <input type="number" name="jumlah_pemasukan" class="form-control" value="<?= $data['jumlah_pemasukan']; ?>" required>
+    </div>
+    <div class="form-group">
+        <label>Tanggal</label>
+        <input type="date" name="tanggal" class="form-control" value="<?= $data['tanggal']; ?>" required>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Edit</button>
+        <button type="button" class="btn btn-danger" onclick="hapusPendapatan(<?= $data['id_pemasukan']; ?>)">Hapus</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+    </div>
+</form>
+
+<script>
+function hapusPendapatan(id) {
+    console.log("Menghapus pemasukan dengan ID: " + id);
+    var form = document.getElementById('formpemasukan' + id);
+    form.action = 'proses_delete_pemasukan.php'; // Pastikan nama file benar
+    form.submit();
+}
+</script>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php
+}
+?>
+
 
           </table>
         </div>

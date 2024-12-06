@@ -63,64 +63,82 @@ while ($row = mysqli_fetch_assoc($result)) {
             <h6 class="m-0 font-weight-bold text-primary">Transaksi Keluar</h6>
           </div>
           <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>ID Pengeluaran</th>
-                    <th>Tanggal</th>
-                    <th>Jumlah</th>
-                    <th>Pengeluaran</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <?php 
-                $query = mysqli_query($koneksi, "SELECT * FROM pengeluaran");
-                while ($data = mysqli_fetch_assoc($query)) {
-                ?>
-                  <tr>
-                    <td><?= $data['id_pengeluaran']; ?></td>
-                    <td><?= $data['tanggal']; ?></td>
-                    <td>Rp. <?= number_format($data['jumlah'], 2, ',', '.'); ?></td>
-                    <td><?= $data['pengeluaran']; ?></td>
-                    <td>
-                      <a href="#" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_pengeluaran']; ?>"></a>
-                    </td>
-                  </tr>
+  <div class="table-responsive">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th>ID Pengeluaran</th>
+          <th>Tanggal</th>
+          <th>Jumlah</th>
+          <th>Pengeluaran</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+      <?php 
+      $query = mysqli_query($koneksi, "SELECT * FROM pengeluaran");
+      while ($data = mysqli_fetch_assoc($query)) {
+      ?>
+        <tr>
+          <td><?= $data['id_pengeluaran']; ?></td>
+          <td><?= $data['tanggal']; ?></td>
+          <td>Rp. <?= number_format($data['jumlah'], 2, ',', '.'); ?></td>
+          <td><?= $data['pengeluaran']; ?></td>
+          <td>
+            <a href="#" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_pengeluaran']; ?>"></a>
+          </td>
+        </tr>
 
-                  <div class="modal fade" id="myModal<?= $data['id_pengeluaran']; ?>" role="dialog">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Ubah Data Pengeluaran</h4>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                          <form action="proses-edit-pengeluaran.php" method="post">
-                            <input type="hidden" name="id_pengeluaran" value="<?= $data['id_pengeluaran']; ?>">
-                            <div class="form-group">
-                              <label>Pengeluaran</label>
-                              <input type="text" name="pengeluaran" class="form-control" value="<?= $data['pengeluaran']; ?>" required>
-                            </div>
-                            <div class="form-group">
-                              <label>Tanggal</label>
-                              <input type="date" name="tanggal" class="form-control" value="<?= $data['tanggal']; ?>" required>
-                            </div>
-                            <div class="form-group">
-                              <label>Jumlah</label>
-                              <input type="number" name="jumlah" class="form-control" value="<?= $data['jumlah']; ?>" required>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="submit" class="btn btn-success">Ubah</button>
-                              <button type="button" class="btn btn-danger" data-dismiss="modal">Keluar</button>
-                            </div>
-                          </form>
-                        </div>
+        <div class="modal fade" id="myModal<?= $data['id_pengeluaran']; ?>" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Ubah Data Pengeluaran</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <form id="formpengeluaran<?= $data['id_pengeluaran']; ?>" method="post">
+                  <input type="hidden" name="id_pengeluaran" value="<?= $data['id_pengeluaran']; ?>">
+                  <div class="form-group">
+                    <label>Pengeluaran</label>
+                    <input type="text" name="pengeluaran" class="form-control" value="<?= $data['pengeluaran']; ?>" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" name="tanggal" class="form-control" value="<?= $data['tanggal']; ?>" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Jumlah</label>
+                    <input type="number" name="jumlah" class="form-control" value="<?= $data['jumlah']; ?>" required>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Ubah</button>
+                    <button type="button" class="btn btn-danger" onclick="hapusPengeluaran(<?= $data['id_pengeluaran']; ?>)">Hapus</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php } ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function hapusPengeluaran(id) {
+    console.log("Menghapus pengeluaran dengan ID: " + id);
+    var form = document.getElementById('formpengeluaran' + id);
+    form.action = 'proses_delete_pengeluaran.php';
+    form.submit();
+  }
+</script>
+
                       </div>
                     </div>
                   </div>
-                <?php } ?>
                 </tbody>
               </table>
             </div>
